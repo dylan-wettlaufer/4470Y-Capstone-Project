@@ -1,11 +1,19 @@
-import requests
-from bs4 import BeautifulSoup
-import spacy
-
+from extract_biography import extract_info
+from ner import extract_persons
 
 
 url = "https://www.biographi.ca/en/bio/pearson_lester_bowles_20E.html"
 
+json_data = extract_info(url)
+print(json_data)
+
+print()
+
+persons = extract_persons(json_data["biography"])
+for p in persons:
+    print(p)
+
+'''
 response = requests.get(url)
 response.raise_for_status()  # raises an error if request failed
 
@@ -32,7 +40,7 @@ if biblio_section:
 else:
     print("Bibliography section not found.")
 
-
+print(bio_text);
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -58,3 +66,5 @@ clean_persons = sorted(set(clean_persons))
 print("Cleaned Persons found:")
 for p in clean_persons:
     print(p)
+    
+'''
