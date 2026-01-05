@@ -13,17 +13,20 @@ def extract_info(url):
     # Extract id from url
     person_id = url.rstrip('/').split('/')[-1]
     
-    biography = extract_bio(soup)
+    subject_name = extract_subject_name(soup) # extract subject name
+
+    biography = extract_bio(soup) # extract bio
     bibliography = extract_biblio(soup)
 
     output = {
         "url": url,
         "person_id": person_id,
+        "subject_name": subject_name,
         "biography": biography,
         "bibliography": bibliography
     }
 
-    return output
+    return output # return json
 
 
 def extract_bio(soup):
@@ -33,7 +36,7 @@ def extract_bio(soup):
     bio_section = soup.find("section", {"id": "first", "class": "bio"})
     bio_text = ""
 
-    if bio_section:
+    if bio_section: # remove images
         for img_div in bio_section.find_all("div", id="bio-primary-image"):
             img_div.decompose()
 
@@ -46,10 +49,10 @@ def extract_bio(soup):
     return bio_text
 
 def extract_biblio(soup):
-    biblio_section = soup.find("section", {"id": "second", "class": "biblio"})
+    biblio_section = soup.find("section", {"id": "second", "class": "biblio"}) # find biblio section
     biblio_text = "";
 
-    if biblio_section:
+    if biblio_section: # if text exists, clean it
         biblio_text = biblio_section.get_text(separator="\n", strip=True)
         biblio_text = clean_text(biblio_text)
 
@@ -60,7 +63,6 @@ def extract_biblio(soup):
     
 
 def clean_text(text):
-    """Remove special whitespace characters and normalize text."""
     # Replace non-breaking spaces and other special spaces with regular spaces
     text = text.replace('\xa0', ' ')
     text = text.replace('\u2009', ' ')  # Thin space
@@ -77,3 +79,15 @@ def clean_text(text):
     text = text.replace('\n', ' ')
     
     return text.strip()
+
+def extract_subject_name(soup): # extract the subject name
+    bio_section = soup.find("section", {"id": "first", "class": "bio"})
+    
+    if bio_section:
+        first_para = bio_section.find("p", class_="FirstParagraph")
+        if first_para:
+            strong_tag = first_para.find("strong") # subject name has a strong text tag
+            if strong_tag:
+                return strong_tag.get_text(strip=True)
+    
+    return None
