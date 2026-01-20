@@ -7,6 +7,7 @@ from openai import OpenAI
 load_dotenv()
 
 def extract_persons(text):
+    """ Extracts person names from the given text using spaCy """
     nlp = spacy.load("en_core_web_sm")
 
     doc = nlp(text)
@@ -21,22 +22,30 @@ def extract_persons(text):
     return clean_persons
 
 def clean_person_names(persons, min_words):
-        # Clean and deduplicate person names
-        cleaned = []
+    """ Cleans and deduplicates person names """
+
+    cleaned = []
         
-        for person in persons:
-            # Remove possessives
-            clean_name = person.replace("'s", "").replace("'", "").strip()
+    for person in persons:
+        # Remove possessives
+        clean_name = person.replace("'s", "").replace("'", "").strip()
             
-            # Filter by word count
-            if len(clean_name.split()) >= min_words:
-                cleaned.append(clean_name)
+        # Filter by word count
+        if len(clean_name.split()) >= min_words:
+            cleaned.append(clean_name)
         
-        # Deduplicate and sort
-        return sorted(set(cleaned))
+    # Deduplicate and sort
+    return sorted(set(cleaned))
 
 
 def extract_persons_llm(biography_text, subject_name):
+    """ Extracts person names from the given text using OpenAI LLM 
+    args:
+        biography_text (str): The biography text to extract person names from
+        subject_name (str): The name of the subject
+    returns:
+        json: A json of the persons name, their relationship to the subject_name, and their role(s)
+    """
     
     # The rules we want the LLM to follow for the output
     system_prompt = f"""
@@ -80,8 +89,9 @@ def extract_persons_llm(biography_text, subject_name):
 
     user_prompt = biography_text # the biograpy text
 
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # set up client
 
+    # call OpenAI API
     response = client.chat.completions.create(
         model="gpt-4o",   
         messages=[
@@ -95,7 +105,7 @@ def extract_persons_llm(biography_text, subject_name):
     text_response = response.choices[0].message.content
 
     try:
-        return json.loads(text_response)  # JSON output same as Gemini
+        return json.loads(text_response)  # return json
     except json.JSONDecodeError:
         print("Failed to parse JSON from OpenAI output")
         print(text_response)

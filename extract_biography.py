@@ -2,7 +2,15 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+
 def extract_info(url): 
+    """ Extracts biographies and bibliographies from the DCB website with the given url 
+        args:
+            url (str): The url of the DCB page to extract biographies and bibliographies from
+        returns:
+            json: A json of the biographies and bibliographies
+    """
+
     response = requests.get(url)
     response.raise_for_status()  # raises an error if request failed
 
@@ -19,7 +27,8 @@ def extract_info(url):
     biography = extract_bio(soup) # extract bio
     bibliography = extract_biblio(soup)
 
-    output = {
+    # structure output as json
+    output = { 
         "url": url,
         "person_id": person_id,
         "subject_name": subject_name,
@@ -31,7 +40,7 @@ def extract_info(url):
 
 
 def extract_bio(soup):
-    bio_section = soup.find("section", {"id": "first", "class": "bio"})
+    """ Extracts the biography from the DCB website with the given soup """
 
     # Extract the bio content
     bio_section = soup.find("section", {"id": "first", "class": "bio"})
@@ -47,9 +56,11 @@ def extract_bio(soup):
     else:
         print("Biography section not found.")
 
-    return bio_text
+    return bio_text # return biography text
 
 def extract_biblio(soup):
+    """ Extracts the bibliography from the DCB website with the given soup """
+
     biblio_section = soup.find("section", {"id": "second", "class": "biblio"}) # find biblio section
     biblio_text = "";
 
@@ -64,6 +75,8 @@ def extract_biblio(soup):
     
 
 def clean_text(text):
+    """ Cleans the text by removing special characters and normalizing spaces """
+
     # Replace non-breaking spaces and other special spaces with regular spaces
     text = text.replace('\xa0', ' ')
     text = text.replace('\u2009', ' ')  # Thin space
@@ -81,14 +94,16 @@ def clean_text(text):
     
     return text.strip()
 
-def extract_subject_name(soup): # extract the subject name
-    bio_section = soup.find("section", {"id": "first", "class": "bio"})
+def extract_subject_name(soup): 
+    """ Extracts the subject name from the DCB website with the given soup """
+
+    bio_section = soup.find("section", {"id": "first", "class": "bio"}) # find the section that contains the bio
     
     if bio_section:
-        first_para = bio_section.find("p", class_="FirstParagraph")
+        first_para = bio_section.find("p", class_="FirstParagraph") # first paragraph has the name
         if first_para:
             strong_tag = first_para.find("strong") # subject name has a strong text tag
-            if strong_tag:
+            if strong_tag: 
                 return strong_tag.get_text(strip=True)
     
     return None
