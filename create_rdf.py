@@ -2,6 +2,9 @@ from rdflib import URIRef, Namespace, Literal, Graph
 from rdflib.namespace import RDF, FOAF
 import re
 import unicodedata
+""" This file is responsible for converting the extracted data into RDF triples using FOAF, BIO, and relationship ontologies.
+    It also creates URIs for all persons and relationships.
+"""
 
 # Namespaces
 BASE = Namespace("https://biographi.ca/person/")
@@ -29,9 +32,13 @@ INVERSE_REL_MAP = {
 }
 
 def create_person_uri(name):
+    """ Creates a URI for a person """
+
     return URIRef(BASE + name.lower().replace(" ", "_"))
 
 def normalize_name(name):
+    """ Normalizes a name by removing special characters and normalizing spaces """
+
     # Normalize Unicode (é → e)
     name = unicodedata.normalize("NFKD", name)
     name = name.encode("ascii", "ignore").decode("ascii")
@@ -55,7 +62,18 @@ def normalize_name(name):
     return name.lower().replace(" ", "_")
 
 
-def build_rdf(persons_json, subject_name, person_id):   
+def build_rdf(persons_json, subject_name, person_id):
+    """ Builds an RDF graph from the given persons_json, subject_name, and person_id 
+    
+    Args:
+        persons_json (dict): Dictionary containing the extracted data
+        subject_name (str): Name of the subject
+        person_id (str): ID of the subject
+    
+    Returns:
+        g (Graph): RDF graph containing the extracted data
+    """
+
     g = Graph()
 
     g.bind("foaf", FOAF)
