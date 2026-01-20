@@ -11,7 +11,8 @@ def extract_info(url):
     soup = BeautifulSoup(html, 'html.parser')
 
     # Extract id from url
-    person_id = url.rstrip('/').split('/')[-1]
+    person_id = url.rstrip('/').split('/')[-1].replace('.html', '') # ensures .html is not included in the id
+
     
     subject_name = extract_subject_name(soup) # extract subject name
 

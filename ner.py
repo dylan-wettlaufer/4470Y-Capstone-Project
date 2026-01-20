@@ -1,8 +1,8 @@
 import spacy
-from google import genai
 import os
 from dotenv import load_dotenv
 import json
+from openai import OpenAI
 
 load_dotenv()
 
@@ -38,54 +38,66 @@ def clean_person_names(persons, min_words):
 
 def extract_persons_llm(biography_text, subject_name):
     
-    prompt = f"""You are analyzing a biographical text about {subject_name} from the Dictionary of Canadian Biography.
+    # The rules we want the LLM to follow for the output
+    system_prompt = f"""
+    You are extracting structured biographical data about {subject_name}
+    from the Dictionary of Canadian Biography.
 
-    Extract ALL person names mentioned in the biography below. For each person:
-    1. Provide their FULL, properly formatted name (e.g., "John George Diefenbaker" not "Diefenbaker")
-    2. Identify their relationship to {subject_name} (e.g., colleague, spouse, opponent, mentor, prime minister they served under)
-    3. Note their role/occupation if mentioned (e.g., Prime Minister, diplomat, journalist)
+    TASK:
+    Extract ALL PERSONS mentioned in the text.
 
-    IMPORTANT RULES:
-    - Only extract PEOPLE, not places, organizations, or book titles
-    - Clean up any formatting artifacts like brackets, asterisks, or possessives
-    - If a person is mentioned multiple times, list them once with all relationships
-    - Include historical figures even if only briefly mentioned
-    - If first name is not given but context makes it clear who it is, include the full name
+    For each person, return:
+    1. Full standardized name
+    2. Their relationship to {subject_name}, using ONLY the allowed relationship types
+    3. Any roles or occupations explicitly stated in the text
 
-    Return your response as valid JSON in this exact format:
+    ALLOWED RELATIONSHIP TYPES:
+    parent, child, spouse, sibling, ancestor, descendant,
+    political_associate, colleague, superior, subordinate,
+    mentor, opponent, monarch, friend, other
+
+    RULES:
+    - Extract PEOPLE ONLY
+    - Do NOT extract {subject_name} 
+    - Do NOT include places, organizations, or publications
+    - Do NOT invent roles or relationships
+    - List each person only once
+    - Do NOT include explanations or prose
+    - If unsure, use "other"
+
+    RETURN FORMAT (valid JSON only):
+
     {{
     "persons": [
         {{
-        "name": "Full Name Here",
-        "relationships": ["relationship1", "relationship2"],
-        "roles": ["role1", "role2"],
-        "context": "Brief note about how they relate to the subject"
+        "name": "Full Name",
+        "relation_to_subject": ["relationship_type"],
+        "roles": ["role1", "role2"]
         }}
     ]
     }}
+    """
 
-    BIOGRAPHY TEXT:
-    {biography_text}
+    user_prompt = biography_text # the biograpy text
 
-    Return ONLY the JSON, no other text."""
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY")) # set up client
-    
-    response = client.models.generate_content( # generate response
-        model="gemini-2.5-flash",  
-        contents=prompt,
-        config=genai.types.GenerateContentConfig(
-            response_mime_type="application/json"
-        )
+    response = client.chat.completions.create(
+        model="gpt-4o",   
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ],
+        response_format={"type": "json_object"},
+        temperature=0
     )
 
-    if response.text:
-        try:
-            persons_data = json.loads(response.text)
-            return persons_data
-        except json.JSONDecodeError as e:
-            print(f"Error parsing JSON: {e}")
-            print(f"Response: {response.text}")
-            return {"persons": []}
-    else:
+    text_response = response.choices[0].message.content
+
+    try:
+        return json.loads(text_response)  # JSON output same as Gemini
+    except json.JSONDecodeError:
+        print("Failed to parse JSON from OpenAI output")
+        print(text_response)
         return {"persons": []}
+
