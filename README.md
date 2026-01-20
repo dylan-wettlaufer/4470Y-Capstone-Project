@@ -1,7 +1,7 @@
 
 # Collective Biography and Historiography with AI
 
-Project Description:
+#### Project Description:
 
 Using LLM-based techniques, create a system to extract structured knowledge about biographical and bibliographical information from the online Dictionary of Canadian Biography (https://www.biographi.ca/en/). This will allow human and AI explorers to discover new historical patterns that emerge from considering the interrelationships of the lives of more than 9000 individuals who have played a role in Canadian History.
 
