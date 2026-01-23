@@ -19,8 +19,7 @@ FORWARD_REL_MAP = {
     "descendant": BIO.ancestorOf,    # Subject is ancestor of this person
     "colleague": REL.colleagueOf,    # Symmetric
     "friend": REL.friendOf,          # Symmetric
-    "mentor": REL.mentorOf,          # Subject is mentor of this person
-    "other": FOAF.knows
+    "mentor": REL.mentorOf          # Subject is mentor of this person
 }
 
 # Relationships that go FROM person TO subject (INVERSE)
@@ -33,7 +32,6 @@ INVERSE_REL_MAP = {
 
 def create_person_uri(name):
     """ Creates a URI for a person """
-
     return URIRef(BASE + name.lower().replace(" ", "_"))
 
 def normalize_name(name):
@@ -110,4 +108,4 @@ def build_rdf(persons_json, subject_name, person_id):
         for role in person.get("roles", []):
             g.add((person_uri, BIO.occupation, Literal(role)))
 
-    return g
+    g.serialize("output/knowledge_graph.ttl", format="turtle")

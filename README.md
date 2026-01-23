@@ -59,6 +59,11 @@ Add OpenAI API key to .env
 OPENAI_API_KEY=your_openai_api_key_here
 ```
 
+### Create output folder to store generated files
+```bash
+mkdir output
+```
+
 ### Run the main script
 
 ```bash
