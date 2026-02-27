@@ -70,3 +70,35 @@ mkdir output
 python main.py
 ```
 
+## Set Up Docker
+
+### Download Docker
+Download docker from https://www.docker.com
+
+### Run Docker
+Once Docker is downloaded, open the application and click run engine.
+
+### Download Project files
+Download Docker.zip from the GitHub repository and extract the folder.
+Open cmd/terminal and navigate to this folder.
+
+### Commands
+Copy and paste these commands into cmd/terminal once navigated to the Docker folder.
+
+```bash
+docker compose down
+docker compose up -d
+docker compose logs -f graphdb-init
+```
+
+If any popups appear asking for permissions, please click allow.
+
+### Open GraphDB Through Browser
+Open your browser of choice and go to http://localhost:7200
+You should see GraphDB open.
+
+### Open Repository
+Click on my-repo and you're all set!
+
+### Optional: Add Your Own Data
+To add more data, navigate to Import on the left, Upload RDF files, then choose your on .ttl file to upload.RD
