@@ -79,7 +79,7 @@ Download docker from https://www.docker.com
 Once Docker is downloaded, open the application and click run engine.
 
 ### Download Project files
-Download Docker.zip from the GitHub repository and extract the folder.
+Download Docker.zip from the GitHub repository and extract the folder (you may have to search for the file in the searchbar).
 Open cmd/terminal and navigate to this folder.
 
 ### Commands
