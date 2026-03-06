@@ -110,4 +110,3 @@ def extract_persons_llm(biography_text, subject_name):
         print("Failed to parse JSON from OpenAI output")
         print(text_response)
         return {"persons": []}
-

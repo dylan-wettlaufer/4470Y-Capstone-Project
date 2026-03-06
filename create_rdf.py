@@ -1,15 +1,13 @@
-from rdflib import URIRef, Namespace, Literal, Graph
+from rdflib import URIRef, Namespace, Literal, Graph, ConjunctiveGraph
 from rdflib.namespace import RDF, FOAF
 import re
 import unicodedata
+from events_rdf import add_events
+from namespaces import BASE, BIO, REL, PROV, RTMN
+
 """ This file is responsible for converting the extracted data into RDF triples using FOAF, BIO, and relationship ontologies.
     It also creates URIs for all persons and relationships.
 """
-
-# Namespaces
-BASE = Namespace("https://biographi.ca/person/")
-BIO  = Namespace("https://biographi.ca/ontology/")
-REL  = Namespace("http://purl.org/vocab/relationship/")
 
 # Relationships that go FROM subject TO person
 FORWARD_REL_MAP = {
@@ -60,7 +58,7 @@ def normalize_name(name):
     return name.lower().replace(" ", "_")
 
 
-def build_rdf(persons_json, subject_name, person_id):
+def build_rdf(persons_json, subject_name, person_id, bio_url, events_json):
     """ Builds an RDF graph from the given persons_json, subject_name, and person_id 
     
     Args:
@@ -72,40 +70,70 @@ def build_rdf(persons_json, subject_name, person_id):
         g (Graph): RDF graph containing the extracted data
     """
 
-    g = Graph()
+    g = ConjunctiveGraph() # use a conjuctive graph for named graphs
 
     g.bind("foaf", FOAF)
     g.bind("bio", BIO)
     g.bind("rel", REL)
 
-    subject_uri = create_person_uri(person_id)
+    g.bind("prov", PROV)
+    g.bind("rtmn", RTMN)
+
+    factoid_counter = 1 
+
+    subject_uri = create_person_uri(normalize_name(subject_name)) # create uri for the subject of the biography (ex. pearson)
+
+    source_node = URIRef(RTMN + f"{normalize_name(subject_name)}_bio") # create uri for the source of the biography (ex. pearson_bio)
+    ng = g.get_context(source_node) 
     
-    g.add((subject_uri, RDF.type, FOAF.Person))
-    g.add((subject_uri, FOAF.name, Literal(normalize_name(subject_name))))
+    ng.add((source_node, RTMN.sourceURL, Literal(bio_url))) # add the source biography url to the source node
     
-    for person in persons_json["persons"]:
+    ng.add((subject_uri, RDF.type, FOAF.Person)) # add the subject to the graph
+    ng.add((subject_uri, FOAF.name, Literal(normalize_name(subject_name)))) # add the subject name to the graph
+    
+    for person in persons_json["persons"]: # create a RDF object for each person
         person_uri = create_person_uri(person["name"])
         
-        g.add((person_uri, RDF.type, FOAF.Person))
-        g.add((person_uri, FOAF.name, Literal(normalize_name(person["name"]))))
+        ng.add((person_uri, RDF.type, FOAF.Person)) # define the type of the person
+        ng.add((person_uri, FOAF.name, Literal(normalize_name(person["name"])))) # add the person name to the graph
 
         # Handle relationships with correct direction
         for rel in person.get("relation_to_subject", []):
+
+            factoid_uri = URIRef(RTMN + f"Factoid_{factoid_counter}") # create a factoid for the relationship
+            factoid_counter += 1
             
-            if rel in FORWARD_REL_MAP:
+            if rel in FORWARD_REL_MAP: # if the relationship is a forward relationship
                 predicate = FORWARD_REL_MAP[rel]
-                g.add((subject_uri, predicate, person_uri))
+
+                ng.add((factoid_uri, RDF.type, RTMN.Factoid)) # define the type of the factoid
+                ng.add((factoid_uri, RDF.subject, subject_uri)) # add the subject to the factoid
+                ng.add((factoid_uri, RDF.predicate, predicate)) # add the predicate to the factoid
+                ng.add((factoid_uri, RDF.object, person_uri)) # add the object to the factoid
+                ng.add((factoid_uri, PROV.wasDerivedFrom, source_node)) # add the source to the factoid
             
             elif rel in INVERSE_REL_MAP:
                 predicate = INVERSE_REL_MAP[rel]
-                g.add((person_uri, predicate, subject_uri))  
+                
+                ng.add((factoid_uri, RDF.type, RTMN.Factoid))
+                ng.add((factoid_uri, RDF.subject, person_uri))
+                ng.add((factoid_uri, RDF.predicate, predicate))
+                ng.add((factoid_uri, RDF.object, subject_uri))
+                ng.add((factoid_uri, PROV.wasDerivedFrom, source_node))
             
             # Default fallback
             else:
-                g.add((subject_uri, FOAF.knows, person_uri))
+                ng.add((factoid_uri, RDF.type, RTMN.Factoid))
+                ng.add((factoid_uri, RDF.subject, subject_uri))
+                ng.add((factoid_uri, RDF.predicate, FOAF.knows))
+                ng.add((factoid_uri, RDF.object, person_uri))
+                ng.add((factoid_uri, PROV.wasDerivedFrom, source_node))
         
         # Add roles
         for role in person.get("roles", []):
-            g.add((person_uri, BIO.occupation, Literal(role)))
+            ng.add((person_uri, BIO.occupation, Literal(role)))
+
+        # add events
+        add_events(ng, events_json, subject_uri, source_node)
 
     g.serialize("output/knowledge_graph.ttl", format="turtle")
