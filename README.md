@@ -41,9 +41,14 @@ python -m venv .venv
 
 Activate virtual enviroment
 
+**MacOS/Linux:**
 ```bash
 source .venv/bin/activate
+```
 
+**Windows:**
+```powershell
+.venv\Scripts\Activate.ps1
 ```
 
 ### Install dependencies
