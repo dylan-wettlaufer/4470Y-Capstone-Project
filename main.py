@@ -3,6 +3,8 @@ from ner import extract_persons, extract_persons_llm
 from create_rdf import build_rdf
 from visualize import visualize_rdf
 from event_extractor import extract_events_llm
+from bibliography import parse_bibliography_llm, convert_llm_to_bibtex
+
 
 """
 Main file used to run the program.
@@ -37,3 +39,6 @@ print()
 build_rdf(persons_llm, json_data["subject_name"], json_data["person_id"], url, events_llm)
 visualize_rdf("output/knowledge_graph.ttl")
 
+print()
+llm_result = parse_bibliography_llm(json_data["bibliography"])
+convert_llm_to_bibtex(llm_result, "output/llm_bibliography.bib")
