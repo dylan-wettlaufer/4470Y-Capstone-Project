@@ -100,7 +100,7 @@ def build_rdf(persons_json, subject_name, person_id, bio_url, events_json):
         # Handle relationships with correct direction
         for rel in person.get("relation_to_subject", []):
 
-            factoid_uri = URIRef(RTMN + f"Factoid_{factoid_counter}") # create a factoid for the relationship
+            factoid_uri = URIRef(RTMN + person_id + f"_Factoid_{factoid_counter}") # create a factoid for the relationship, tagged with person_id and factoid #
             factoid_counter += 1
             
             if rel in FORWARD_REL_MAP: # if the relationship is a forward relationship
