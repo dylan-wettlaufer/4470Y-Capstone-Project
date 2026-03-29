@@ -72,7 +72,7 @@ def extract_biblio(soup):
         print("Bibliography section not found.")
 
     return biblio_text
-    
+
 
 def clean_text(text):
     """ Cleans the text by removing special characters and normalizing spaces """
@@ -80,18 +80,18 @@ def clean_text(text):
     # Replace non-breaking spaces and other special spaces with regular spaces
     text = text.replace('\xa0', ' ')
     text = text.replace('\u2009', ' ')  # Thin space
-    text = text.replace('\u200b', '')   # Zero-width space
+    text = text.replace('\u200b', '')  # Zero-width space
     text = text.replace('\u202f', ' ')  # Narrow no-break space
-    
-    # Normalize multiple spaces to single space
-    text = re.sub(r' +', ' ', text)
-    
+
     # Remove extra whitespace around newlines
     text = re.sub(r' *\n *', '\n', text)
 
     # Replace newlines with spaces
     text = text.replace('\n', ' ')
-    
+
+    # Normalize multiple spaces to single space
+    text = re.sub(r' +', ' ', text)
+
     return text.strip()
 
 def extract_subject_name(soup): 
