@@ -94,7 +94,7 @@ def parse_bibliography_llm(biblio_text):
         response_format={"type": "json_object"},
         temperature=0
     )
-
+    # store response to load into json
     text_response = response.choices[0].message.content
 
     try:
