@@ -4,7 +4,8 @@ from create_rdf import build_rdf
 from visualize import visualize_rdf
 from event_extractor import extract_events_llm
 from bibliography import parse_bibliography_llm, convert_llm_to_bibtex
-from fix_ttl_urls import fix_ttl_urls
+from ner import extract_persons, extract_persons_llm
+from fix_ttl_urls import merge_links_into_json, load_connections_with_urls, fix_ttl_urls
 from connection_links import scan_page_for_links, save_first_hop_connections
 
 

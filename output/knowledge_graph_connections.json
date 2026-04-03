@@ -1,0 +1,201 @@
+{
+  "source_person": "Pearson Lester Bowles 20E",
+  "source_url": "https://www.biographi.ca/en/bio/pearson_lester_bowles_20E.html",
+  "connections": [
+    {
+      "target_person": "CREIGHTON, DONALD GRANT",
+      "target_url": "https://www.biographi.ca/en/bio/creighton_donald_grant_20E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "DIEFENBAKER, JOHN GEORGE",
+      "target_url": "https://www.biographi.ca/en/bio/diefenbaker_john_george_20E.html",
+      "relationship_type": "political_opponent",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "DOUGLAS, THOMAS CLEMENT (known as Tommy Douglas)",
+      "target_url": "https://www.biographi.ca/en/bio/douglas_thomas_clement_21E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "HOWE, CLARENCE DECATUR",
+      "target_url": "https://www.biographi.ca/en/bio/howe_clarence_decatur_18E.html",
+      "relationship_type": "political",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "LESAGE, JEAN (baptized Joseph-Hertel-Jean)",
+      "target_url": "https://www.biographi.ca/en/bio/lesage_jean_20E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "LÉVESQUE, RENÉ (baptized Charles-René)",
+      "target_url": "https://www.biographi.ca/en/bio/levesque_rene_21E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "ST-LAURENT, LOUIS-STEPHEN (baptized Louis-Étienne)",
+      "target_url": "https://www.biographi.ca/en/bio/st_laurent_louis_stephen_20E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "TRUDEAU, PIERRE ELLIOTT",
+      "target_url": "https://www.biographi.ca/en/bio/trudeau_pierre_elliott_22E.html",
+      "relationship_type": "political",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "BENNETT, RICHARD BEDFORD, 1st Viscount BENNETT",
+      "target_url": "https://www.biographi.ca/en/bio/bennett_richard_bedford_17E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "DUPLESSIS, MAURICE LE NOBLET",
+      "target_url": "https://www.biographi.ca/en/bio/duplessis_maurice_le_noblet_18E.html",
+      "relationship_type": "political_opponent",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "HUGHES, Sir SAMUEL",
+      "target_url": "https://www.biographi.ca/en/bio/hughes_samuel_15E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "KING, WILLIAM LYON MACKENZIE",
+      "target_url": "https://www.biographi.ca/en/bio/king_william_lyon_mackenzie_17E.html",
+      "relationship_type": "political",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "MACDONALD, Sir JOHN ALEXANDER",
+      "target_url": "https://www.biographi.ca/en/bio/macdonald_john_alexander_12E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "CRERAR, HENRY DUNCAN GRAHAM",
+      "target_url": "https://www.biographi.ca/en/bio/crerar_henry_duncan_graham_19E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "FRYE, HERMAN NORTHROP",
+      "target_url": "https://www.biographi.ca/en/bio/frye_herman_northrop_22E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "GRANT, GEORGE PARKIN",
+      "target_url": "https://www.biographi.ca/en/bio/grant_george_parkin_21E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Published: 2005",
+      "target_url": "https://www.biographi.ca/en/bio/7988?revision_id=24636",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Minor Revision: Oct. 2016",
+      "target_url": "https://www.biographi.ca/en/bio/7988?revision_id=27652",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Hughes*",
+      "target_url": "https://www.biographi.ca/en/bio/hughes_samuel_15E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Bennett*",
+      "target_url": "https://www.biographi.ca/en/bio/bennett_richard_bedford_17E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "King*",
+      "target_url": "https://www.biographi.ca/en/bio/king_william_lyon_mackenzie_17E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "St-Laurent",
+      "target_url": "https://www.biographi.ca/en/bio/st_laurent_louis_stephen_20E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Diefenbaker",
+      "target_url": "https://www.biographi.ca/en/bio/diefenbaker_john_george_20E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Howe*",
+      "target_url": "https://www.biographi.ca/en/bio/howe_clarence_decatur_18E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Lesage",
+      "target_url": "https://www.biographi.ca/en/bio/lesage_jean_20E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Duplessis*",
+      "target_url": "https://www.biographi.ca/en/bio/duplessis_maurice_le_noblet_18E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Trudeau*",
+      "target_url": "https://www.biographi.ca/en/bio/trudeau_pierre_elliott_22E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Douglas*",
+      "target_url": "https://www.biographi.ca/en/bio/douglas_thomas_clement_21E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Lévesque*",
+      "target_url": "https://www.biographi.ca/en/bio/levesque_rene_21E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Creighton",
+      "target_url": "https://www.biographi.ca/en/bio/creighton_donald_grant_20E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Macdonald*",
+      "target_url": "https://www.biographi.ca/en/bio/macdonald_john_alexander_12E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    },
+    {
+      "target_person": "Diefenbaker",
+      "target_url": "https://www.biographi.ca/en/bio/diefenbaker_john_george_20E.html",
+      "relationship_type": "mentioned",
+      "connection_strength": "first_hop"
+    }
+  ],
+  "total_connections": 32,
+  "extraction_date": "2026-03-23",
+  "relationship_detection": "ai_enhanced"
+}
