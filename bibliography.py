@@ -207,5 +207,3 @@ def convert_llm_to_bibtex(llm_entries, filename="output/bibliography.bib"):
     
     print(f"Comprehensive LLM Bibliography saved to {filename}")
     print(f"Created {len(bibtex_entries)} enhanced BibTeX entries")
-
-

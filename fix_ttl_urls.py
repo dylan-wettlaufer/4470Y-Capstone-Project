@@ -54,33 +54,29 @@ def fix_ttl_urls():
 
 
 # merges the clickable links into the persons json file
-# def merge_links_into_json(persons_json, clickable_links):
-#     existing_names = {p["name"].lower() for p in persons_json["persons"]}
+def merge_links_into_json(persons_json, clickable_links):
+    existing_names = {p["name"].lower() for p in persons_json["persons"]}
 
-#     for link in clickable_links["connections"]:
-#         name = link["target_person"]
+    for link in clickable_links["connections"]:
+        name = link["target_person"]
 
-#         if name.lower() not in existing_names:
-#             persons_json["persons"].append({
-#                 "name": name,
-#                 "relation_to_subject": ["other"],
-#                 "roles": [],
-#                 "url": link.get("target_url", "")
-#             })
-#         else:
-#             for p in persons_json["persons"]:
-#                 if p["name"].lower() == name.lower():
-#                     if "target_url" in link:
-#                         p["url"] = link["target_url"]
+        if name.lower() not in existing_names:
+            persons_json["persons"].append({
+                "name": name,
+                "relation_to_subject": ["other"],
+                "roles": [],
+                "url": link.get("target_url", "")
+            })
+        else:
+            for p in persons_json["persons"]:
+                if p["name"].lower() == name.lower():
+                    if "target_url" in link:
+                        p["url"] = link["target_url"]
 
-#     return persons_json
+    return persons_json
 
 # loads the connections with urls json file
 def load_connections_with_urls(path):
     """Load JSON file containing connections or clickable links."""
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
-
-# # main function
-# if __name__ == "__main__":
-#     fix_ttl_urls()

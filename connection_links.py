@@ -229,20 +229,3 @@ def save_first_hop_connections(page_url, valid_links, output_file="output/knowle
     print(f" Source: {person_name}")
     return connections
 
-# if __name__ == "__main__":
-#     # calls the scan_page_for_links function and prints the results including all valid clickable links
-#     page_url = "https://www.biographi.ca/en/bio/pearson_lester_bowles_20E.html"
-    
-#     result = scan_page_for_links(page_url)
-    
-#     if 'error found: ' in result:
-#         print(f"Error: {result['error found: ']}")
-#     else:
-#         print(f"Found {result['total_found']} links ({len(result['valid_links'])} valid)")
-        
-#         for link in result['valid_links']:
-#             print(f"  {link['name']}")
-        
-#         connections = save_first_hop_connections(page_url, result['valid_links'])
-        
-#         print(f"Saved {connections['total_connections']} connections to knowledge_graph_connections.json")
