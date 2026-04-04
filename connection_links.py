@@ -6,7 +6,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 load_dotenv()
 
-# Function to scan a biography page for valid biography links
+# function to scan a biography page for valid biography links
 def scan_page_for_links(page_url):
     """
     scans a biography page for valid biography links.
@@ -197,7 +197,7 @@ def save_first_hop_connections(page_url, valid_links, output_file="output/knowle
     
     # get all target names for batch processing
     all_target_names = [link['name'] for link in valid_links]
-    print(f"Getting relationships for all {len(all_target_names)} people in one API call...")
+    print(f"Getting relationships for {len(all_target_names)} people in one API call")
     
     # get all relationships in one API call
     all_relationships = detect_all_relationships_with_llm(person_name, all_target_names, biography_text)
@@ -221,11 +221,10 @@ def save_first_hop_connections(page_url, valid_links, output_file="output/knowle
     
     # save to JSON file
     import json
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(connections, f, indent=2, ensure_ascii=False)
+    with open(output_file, 'w', encoding='utf-8') as out_file:
+        json.dump(connections, out_file, indent=2, ensure_ascii=False)
     
     # print summary
-    print(f"\n Saved {len(valid_links)} first-hop connections to {output_file}")
-    print(f" Source: {person_name}")
+    print(f"\n Saved {len(valid_links)} first-hop connections to our {output_file}")
+    print(f" Source name: {person_name}")
     return connections
-

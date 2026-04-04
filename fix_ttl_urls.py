@@ -23,7 +23,9 @@ def fix_ttl_urls():
     fixes = 0
 
     # finds all person URIs in the ttl file
-    ttl_people = re.findall(r'<https://biographi\.ca/person/([^>]+)>', content)
+    pattern = r'<https://biographi\.ca/person/([^>]+)>'
+
+    ttl_people = re.findall(pattern, content)
 
 
     for conn in data["connections"]:
@@ -36,14 +38,14 @@ def fix_ttl_urls():
             ttl_tokens = set(ttl_slug.split('_'))
             
             overlap = json_tokens.intersection(ttl_tokens)
-            
+            # if at least 2 tokens match then we know we need to fix the url
             if len(overlap) >= 2:
                 old_uri = f'<https://biographi.ca/person/{ttl_slug}>'
                 new_uri = f'<{url}>'
                 
                 if old_uri in content:
                     content = content.replace(old_uri, new_uri)
-                    print(f"Fixed: {json_name} → {ttl_slug}")
+                    print(f"Fixed: {json_name} to {ttl_slug}")
                     fixes += 1
                     break
 
@@ -52,31 +54,7 @@ def fix_ttl_urls():
     
     print(f"\nDone! Total fixes: {fixes}")
 
-
-# merges the clickable links into the persons json file
-def merge_links_into_json(persons_json, clickable_links):
-    existing_names = {p["name"].lower() for p in persons_json["persons"]}
-
-    for link in clickable_links["connections"]:
-        name = link["target_person"]
-
-        if name.lower() not in existing_names:
-            persons_json["persons"].append({
-                "name": name,
-                "relation_to_subject": ["other"],
-                "roles": [],
-                "url": link.get("target_url", "")
-            })
-        else:
-            for p in persons_json["persons"]:
-                if p["name"].lower() == name.lower():
-                    if "target_url" in link:
-                        p["url"] = link["target_url"]
-
-    return persons_json
-
 # loads the connections with urls json file
 def load_connections_with_urls(path):
-    """Load JSON file containing connections or clickable links."""
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)

@@ -35,10 +35,7 @@ def parse_bibliography_llm(biblio_text):
     11. Number - series/issue number
     12. Edition - edition information
     13. Editor - editor name(s) if different from author
-    14. Translator - translator name(s) if applicable
-    15. Keywords - relevant subject keywords
-    16. Abstract - brief summary if available
-    17. Note - additional details like "Reprinted with new introduction"
+    14. Note - additional details like "Reprinted with new introduction"
 
     ALLOWED TYPES:
     book, article, archive, government_document, thesis, manuscript, book_chapter, conference_paper, newspaper_article, other
@@ -53,6 +50,18 @@ def parse_bibliography_llm(biblio_text):
     - If unsure about any field, leave as "" (empty string)
     - List each entry only once
     - Do NOT include explanations or prose
+    INCLUDE:
+    - Books written by Lester B. Pearson
+    - Books about Lester B. Pearson's life and career
+    - Books by his political contemporaries (Diefenbaker, Trudeau, etc.)
+    - Academic works about Canadian politics in the Pearson era (1950s-1970s)
+    - Scholarly biographies of relevant political figures
+
+    EXCLUDE:
+    - Generic archival collection descriptions
+    - Government documents without individual authors
+    - Unrelated academic works
+    - Finding aids or collection inventories
 
     RETURN FORMAT (valid JSON only):
 
@@ -72,9 +81,6 @@ def parse_bibliography_llm(biblio_text):
         "number": "92",
         "edition": "",
         "editor": "",
-        "translator": "",
-        "keywords": "",
-        "abstract": "",
         "note": "Selected and edited with an introduction by the author"
         }
     ]
@@ -138,10 +144,10 @@ def convert_llm_to_bibtex(llm_entries, filename="output/bibliography.bib"):
         }
         bibtex_type = bibtex_type_mapping.get(entry_type, 'book')
         
-        #create BibTeX entry
+        # create BibTeX entry
         bibtex = f"@{bibtex_type}{{{key},\n"
         
-        #standard fields to have
+        # standard fields to have
         if entry.get('author') and entry.get('author') != "Unknown":
             bibtex += f"    author = {{{entry['author']}}},\n"
             
@@ -156,9 +162,6 @@ def convert_llm_to_bibtex(llm_entries, filename="output/bibliography.bib"):
             
         if entry.get('address'):
             bibtex += f"    address = {{{entry['address']}}},\n"
-            
-        if entry.get('isbn'):
-            bibtex += f"    isbn = {{{entry['isbn']}}},\n"
             
         if entry.get('pages'):
             bibtex += f"    pages = {{{entry['pages']}}},\n"
@@ -177,15 +180,6 @@ def convert_llm_to_bibtex(llm_entries, filename="output/bibliography.bib"):
             
         if entry.get('editor'):
             bibtex += f"    editor = {{{entry['editor']}}},\n"
-            
-        if entry.get('translator'):
-            bibtex += f"    translator = {{{entry['translator']}}},\n"
-            
-        if entry.get('keywords'):
-            bibtex += f"    keywords = {{{entry['keywords']}}},\n"
-            
-        if entry.get('abstract'):
-            bibtex += f"    abstract = {{{entry['abstract']}}},\n"
             
         # note field for additional details
         note_fields = []
@@ -206,4 +200,4 @@ def convert_llm_to_bibtex(llm_entries, filename="output/bibliography.bib"):
             f.write(entry + "\n\n")
     
     print(f"Comprehensive LLM Bibliography saved to {filename}")
-    print(f"Created {len(bibtex_entries)} enhanced BibTeX entries")
+    print(f"Created {len(bibtex_entries)} BibTeX entries")
