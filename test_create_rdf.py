@@ -25,10 +25,10 @@ class TestNormalizeName:
         White box test: Verify all code paths in normalize_name()
 
         Code paths tested:
-        1. Unicode normalization (NFKD)
+        1. Unicode normalization
         2. ASCII encoding with ignore
         3. Comma handling for "Last, First" format
-        4. Title/honorific removal (regex)
+        4. Title removal
         5. Punctuation removal
         6. Whitespace normalization
         7. Lowercase conversion
@@ -55,7 +55,7 @@ class TestNormalizeName:
         """
         White box test: Test all title removal patterns
         """
-        # Test all honorifics in the regex pattern
+        # Test all titles in the regex pattern
         assert normalize_name("Sir John Smith") == "john_smith"
         assert normalize_name("Lord William Brown") == "william_brown"
         assert normalize_name("Lady Mary Jane") == "mary_jane"
@@ -132,13 +132,13 @@ class TestCreatePersonURI:
 
 
 class TestBuildRDF:
-    """Integration tests for build_rdf function, REQ-009"""
+    """Integration tests for build_rdf function"""
 
     def test_build_rdf_forward_relationship(self):
         """
-        White box test: Verify forward relationship direction (subject → person)
+        White box test: Verify forward relationship direction (subject, person)
 
-        Code path: build_rdf() → check FORWARD_REL_MAP → add triple
+        Code path: build_rdf(), check FORWARD_REL_MAP, add triple
         """
         persons_json = {
             "persons": [
@@ -173,9 +173,9 @@ class TestBuildRDF:
 
     def test_build_rdf_inverse_relationship(self):
         """
-        White box test: Verify inverse relationship direction (person → subject)
+        White box test: Verify inverse relationship direction (person, subject)
 
-        Code path: build_rdf() → check INVERSE_REL_MAP → add inverted triple
+        Code path: build_rdf(), check INVERSE_REL_MAP, add inverted triple
         """
         persons_json = {
             "persons": [
@@ -221,7 +221,7 @@ class TestBuildRDF:
         """
         White box test: Verify fallback to foaf:knows for unknown relationships
 
-        Code path: build_rdf() → not in FORWARD_REL_MAP → not in INVERSE_REL_MAP → else clause
+        Code path: build_rdf(), not in FORWARD_REL_MAP, not in INVERSE_REL_MAP, else clause
         """
         g = Graph()
         subject_uri = URIRef(BASE + "pearson_20e")
@@ -236,9 +236,7 @@ class TestBuildRDF:
         """
         White box test: Verify multiple roles are all added to RDF
 
-        Code path: build_rdf() → for role in person.get("roles", []) → add occupation triple
-
-        This is a regression test for BUG-001 (TC-015)
+        Code path: build_rdf(), for role in person.get("roles", []), add occupation triple
         """
         g = Graph()
         person_uri = URIRef(BASE + "multi_role")
@@ -384,37 +382,6 @@ class TestEdgeCases:
         """
         uri = create_person_uri("")
         assert str(uri) == "https://biographi.ca/person/"
-
-
-class TestRegressionCases:
-    """Regression tests to prevent reintroduction of fixed bugs"""
-
-    def test_multiple_roles_regression(self):
-        """
-        Regression test: Ensure multiple roles bug (BUG-001) stays fixed
-
-        History:
-        - v1.0: Bug - only last role was kept
-        - v1.1: Fixed - all roles now preserved
-
-        This test ensures the fix remains in place
-        """
-        g = Graph()
-        person_uri = URIRef(BASE + "test_person")
-
-        # Add three roles as the fixed code should do
-        roles = ["diplomat", "politician", "author"]
-        for role in roles:
-            g.add((person_uri, BIO.occupation, Literal(role)))
-
-        # Verify all roles are present (not just the last one)
-        actual_roles = list(g.objects(person_uri, BIO.occupation))
-        assert len(actual_roles) == 3, "Multiple roles regression: Not all roles were added"
-
-        # Verify specific roles
-        role_strings = [str(r) for r in actual_roles]
-        for role in roles:
-            assert role in role_strings, f"Role {role} missing - possible regression"
 
 
 if __name__ == "__main__":

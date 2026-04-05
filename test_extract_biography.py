@@ -53,12 +53,12 @@ SAMPLE_HTML_NO_BIBLIO = """
 
 
 class TestExtractInfo:
-    """Black box tests for extract_info function, REQ-002"""
+    """Black box tests for extract_info function"""
 
     @patch('extract_biography.requests.get')
     def test_extract_info_success(self, mock_get):
         """
-        Black box test: Verify system extracts all fields from valid URL, REQ-002
+        Black box test: Verify system extracts all fields from valid URL
 
         Test data: Valid DCB URL with complete HTML
         Expected: JSON with all required fields populated
@@ -148,7 +148,7 @@ class TestExtractBio:
         """
         White box test: Verify biography extraction from valid HTML
 
-        Code path: find section → remove images → get_text → clean_text
+        Code path: find section, remove images, get_text, clean_text
         """
         soup = BeautifulSoup(SAMPLE_BIOGRAPHY_HTML, 'html.parser')
         result = extract_bio(soup)
@@ -161,7 +161,7 @@ class TestExtractBio:
         """
         White box test: Verify image div removal logic
 
-        Code path: bio_section.find_all("div", id="bio-primary-image") → decompose()
+        Code path: bio_section.find_all("div", id="bio-primary-image"), decompose()
         """
         soup = BeautifulSoup(SAMPLE_BIOGRAPHY_HTML, 'html.parser')
         result = extract_bio(soup)
@@ -191,7 +191,7 @@ class TestExtractBio:
         """
         White box test: Verify clean_text is applied to biography, REQ-003
 
-        Code path: bio_section.get_text() → clean_text(bio_text)
+        Code path: bio_section.get_text(), clean_text(bio_text)
         """
         html = """
         <section id="first" class="bio">
@@ -215,7 +215,7 @@ class TestExtractBiblio:
         """
         White box test: Verify bibliography extraction from valid HTML
 
-        Code path: find section → get_text → clean_text
+        Code path: find section, get_text, clean_text
         """
         soup = BeautifulSoup(SAMPLE_BIOGRAPHY_HTML, 'html.parser')
         result = extract_biblio(soup)
@@ -241,9 +241,9 @@ class TestExtractBiblio:
 
     def test_extract_biblio_applies_text_cleaning(self):
         """
-        White box test: Verify clean_text is applied to bibliography, REQ-003
+        White box test: Verify clean_text is applied to bibliography
 
-        Code path: biblio_section.get_text() → clean_text(biblio_text)
+        Code path: biblio_section.get_text(), clean_text(biblio_text)
         """
         html = """
         <section id="second" class="biblio">
@@ -343,7 +343,7 @@ class TestExtractSubjectName:
         """
         White box test: Verify subject name extraction from valid HTML
 
-        Code path: find bio section → find FirstParagraph → find strong tag → get_text
+        Code path: find bio section, find FirstParagraph, find strong tag, get_text
         """
         soup = BeautifulSoup(SAMPLE_BIOGRAPHY_HTML, 'html.parser')
         result = extract_subject_name(soup)
@@ -367,7 +367,8 @@ class TestExtractSubjectName:
         """
         White box test: Verify handling when FirstParagraph class doesn't exist
 
-        Code path: bio_section.find("p", class_="FirstParagraph") returns None
+        Code path: bio_section.find("p", class_="FirstParagraph")
+        Expected: None returned
         """
         html = """
         <section id="first" class="bio">
@@ -383,7 +384,8 @@ class TestExtractSubjectName:
         """
         White box test: Verify handling when strong tag doesn't exist
 
-        Code path: first_para.find("strong") returns None
+        Code path: first_para.find("strong")
+        Expected: None returned
         """
         html = """
         <section id="first" class="bio">
@@ -468,7 +470,7 @@ class TestIntegration:
     @patch('extract_biography.requests.get')
     def test_extraction_with_missing_sections(self, mock_get):
         """
-        Integration test: Verify graceful handling of missing sections, REQ-010
+        Integration test: Verify graceful handling of missing sections
 
         Test data: HTML with only bibliography
         Expected: System continues, returns empty strings for missing data
@@ -493,6 +495,8 @@ class TestEdgeCases:
     def test_clean_text_only_special_characters(self):
         """
         Black box test: Text with only special characters
+
+        Expected Result: Blank string returned
         """
         text = "\xa0\u2009\u200b\u202f"
         result = clean_text(text)
@@ -501,6 +505,8 @@ class TestEdgeCases:
     def test_extract_subject_name_empty_strong_tag(self):
         """
         Black box test: Empty strong tag
+
+        Expected Result: Blank string returned
         """
         html = """
         <section id="first" class="bio">
