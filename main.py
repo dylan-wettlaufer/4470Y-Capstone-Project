@@ -1,14 +1,12 @@
 from extract_biography import extract_info
-from ner import extract_persons, extract_persons_llm
+from ner import extract_persons_llm
 from create_rdf import build_rdf
 from visualize import visualize_rdf
 from event_extractor import extract_events_llm
 from bibliography import parse_bibliography_llm, convert_llm_to_bibtex
 from ner import extract_persons, extract_persons_llm
-from fix_ttl_urls import load_connections_with_urls, fix_ttl_urls
+from fix_ttl_urls import merge_links_into_json, load_connections_with_urls, fix_ttl_urls
 from connection_links import scan_page_for_links, save_first_hop_connections
-
-
 
 
 """
@@ -42,11 +40,10 @@ else:
     print(f"Saved {connections['total_connections']} connections")
 
 persons_llm = extract_persons_llm(json_data["biography"], json_data["subject_name"])
-
-# clickable_links = load_connections_with_urls("output/knowledge_graph_connections.json")
-# persons_llm = merge_links_into_json(persons_llm, clickable_links)
+print(persons_llm)
 
 events_llm = extract_events_llm(json_data["biography"], json_data["subject_name"])
+print(events_llm)
 
 build_rdf(persons_llm, json_data["subject_name"], json_data["person_id"], url, events_llm)
 

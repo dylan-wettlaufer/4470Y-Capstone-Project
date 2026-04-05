@@ -1,3 +1,4 @@
+""" Ontology namespaces used to create the knowledge graph """
 from rdflib import Namespace
 
 BASE = Namespace("https://biographi.ca/person/")
