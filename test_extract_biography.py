@@ -189,7 +189,7 @@ class TestExtractBio:
 
     def test_extract_bio_applies_text_cleaning(self):
         """
-        White box test: Verify clean_text is applied to biography, REQ-003
+        White box test: Verify clean_text is applied to biography
 
         Code path: bio_section.get_text(), clean_text(bio_text)
         """
@@ -294,7 +294,7 @@ class TestCleanText:
         """
         White box test: Verify newline handling
 
-        Code path: re.sub(r' *\n *', '\n', text) → text.replace('\n', ' ')
+        Code path: re.sub(r' *\n *', '\n', text), text.replace('\n', ' ')
         """
         # Single newline
         assert clean_text("Line1\nLine2") == "Line1 Line2"
