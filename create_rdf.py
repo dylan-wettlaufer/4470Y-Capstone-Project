@@ -136,4 +136,5 @@ def build_rdf(persons_json, subject_name, person_id, bio_url, events_json):
         # add events
         add_events(ng, events_json, subject_uri, source_node)
 
-    g.serialize("output/knowledge_graph.ttl", format="turtle")
+    g.serialize("output/" + person_id + "_" + "knowledge_graph.ttl", format="turtle")
+    return person_id
