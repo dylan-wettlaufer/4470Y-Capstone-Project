@@ -29,7 +29,6 @@ json_data = extract_info(url)
 print(json_data)
 print()
 
-# Step 2: Scan for links and save first-hop connections
 print("Scanning for biography links...")
 result = scan_page_for_links(url)
 if 'error found: ' in result:
@@ -42,14 +41,17 @@ else:
 persons_llm = extract_persons_llm(json_data["biography"], json_data["subject_name"])
 print(persons_llm)
 
+print()
+
 events_llm = extract_events_llm(json_data["biography"], json_data["subject_name"])
 print(events_llm)
 
 person_id = build_rdf(persons_llm, json_data["subject_name"], json_data["person_id"], url, events_llm)
 
+print()
 print("Fixing TTL URLs...")
 print("person_id: " + person_id)
-fix_ttl_urls()
+fix_ttl_urls(json_data["person_id"])
 visualize_rdf("output/" + person_id + "_" + "knowledge_graph.ttl")
 
 

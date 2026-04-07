@@ -10,13 +10,13 @@ def normalize(text):
     return set(words)
 
 
-def fix_ttl_urls():
+def fix_ttl_urls(person_id):
     # loads the knowledge graph connections json file that has all the clickable links
     with open('output/knowledge_graph_connections.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
     
     # loads the knowledge graph ttl file
-    with open('output/knowledge_graph.ttl', 'r', encoding='utf-8') as f:
+    with open('output/' + person_id + '_knowledge_graph.ttl', 'r', encoding='utf-8') as f:
         content = f.read()
     
     # initializes fixes counter
@@ -49,7 +49,7 @@ def fix_ttl_urls():
                     fixes += 1
                     break
 
-    with open('output/knowledge_graph.ttl', 'w', encoding='utf-8') as f:
+    with open('output/' + person_id + '_knowledge_graph.ttl', 'w', encoding='utf-8') as f:
         f.write(content)
     
     print(f"\nDone! Total fixes: {fixes}")
